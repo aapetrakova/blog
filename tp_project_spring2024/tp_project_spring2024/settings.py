@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     "crispy_forms",
     "crispy_bootstrap4",
+    'user.apps.UserConfig',
 ]
 
 MIDDLEWARE = [
@@ -154,3 +155,5 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+LOGOUT_REDIRECT_URL = "/"
