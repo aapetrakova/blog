@@ -41,9 +41,10 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'ckeditor',
     'ckeditor_uploader',
-    "crispy_forms",
-    "crispy_bootstrap4",
+    'crispy_forms',
+    'crispy_bootstrap4',
     'user.apps.UserConfig',
+    'message.apps.MessageConfig',
 ]
 
 MIDDLEWARE = [
