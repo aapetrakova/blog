@@ -1,3 +1,9 @@
 from django.contrib import admin
+from .models import UserPost
 
-# Register your models here.
+
+class UserPostAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'url': ['title']}
+
+
+admin.site.register(UserPost, UserPostAdmin)

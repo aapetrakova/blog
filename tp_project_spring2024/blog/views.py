@@ -2,12 +2,11 @@ from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.core.paginator import Paginator
 
-from .models import Post
-
+from user.models import UserPost
 
 class MainPageView(View):
     def get(self, request, *args, **kwargs):
-        posts = Post.objects.all()
+        posts = UserPost.objects.all()
         paginator = Paginator(posts, 6)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
@@ -19,8 +18,8 @@ class MainPageView(View):
 class PostDetailView(View):
 
     def get(self, request, slug, *args, **kwargs):
-        post = get_object_or_404(Post, url=slug)
-        last_posts = Post.objects.all().order_by('-id')[:5]
+        post = get_object_or_404(UserPost, url=slug)
+        last_posts = UserPost.objects.all().order_by('-id')[:5]
         return render(request, 'blog/post_details.html', context={
             'post': post,
             'last_posts': last_posts,
