@@ -8,6 +8,9 @@ from message.models import Comment
 from message.forms import CommentForm
 from django.http import HttpResponseRedirect
 
+from taggit.models import Tag
+
+
 class MainPageView(View):
     def get(self, request, *args, **kwargs):
         posts = UserPost.objects.all()
@@ -20,15 +23,16 @@ class MainPageView(View):
 
 
 class PostDetailView(View):
-
     def get(self, request, slug, *args, **kwargs):
         post = get_object_or_404(UserPost, url=slug)
+        common_tags = UserPost.tag.most_common()
         last_posts = UserPost.objects.all().order_by('-id')[:5]
         comment_form = CommentForm()
         return render(request, 'blog/post_details.html', context={
             'post': post,
+            'common_tags': common_tags,
             'last_posts': last_posts,
-            'comment_form': comment_form,
+            'comment_form': comment_form
         })
 
     def post(self, request, slug, *args, **kwargs):
@@ -39,6 +43,19 @@ class PostDetailView(View):
             post = get_object_or_404(UserPost, url=slug)
             comment = Comment.objects.create(post=post, username=username, text=text)
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-        return render(request, 'myblog/post_details.html', context={
+        return render(request, 'blog/post_details.html', context={
             'comment_form': comment_form
+        })
+
+
+
+class TagView(View):
+    def get(self, request, slug, *args, **kwargs):
+        tag = get_object_or_404(Tag, slug=slug)
+        posts = UserPost.objects.filter(tag=tag)
+        common_tags = UserPost.tag.most_common()
+        return render(request, 'blog/tag.html', context={
+            'title': f'#ТЕГ {tag}',
+            'posts': posts,
+            'common_tags': common_tags
         })
