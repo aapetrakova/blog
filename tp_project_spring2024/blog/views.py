@@ -10,6 +10,8 @@ from django.http import HttpResponseRedirect
 
 from taggit.models import Tag
 
+from django.db.models import Q
+
 
 class MainPageView(View):
     def get(self, request, *args, **kwargs):
@@ -58,4 +60,22 @@ class TagView(View):
             'title': f'#ТЕГ {tag}',
             'posts': posts,
             'common_tags': common_tags
+        })
+
+
+class SearchResultsView(View):
+    def get(self, request, *args, **kwargs):
+        query = self.request.GET.get('q')
+        results = ""
+        if query:
+            results = UserPost.objects.filter(
+                Q(h1__icontains=query) | Q(content__icontains=query)
+            )
+        paginator = Paginator(results, 6)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, 'blog/search.html', context={
+            'title': 'Поиск',
+            'results': page_obj,
+            'count': paginator.count
         })
