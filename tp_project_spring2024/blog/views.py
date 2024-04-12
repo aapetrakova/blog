@@ -2,7 +2,13 @@ from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.core.paginator import Paginator
 
-from user.models import UserPost
+from user.models import UserPost, Profile
+from user.forms import UserUpdateForm, ProfileUpdateForm
+from django.views.generic import DetailView, UpdateView
+from django.db import transaction
+from django.urls import reverse_lazy
+
+
 
 from message.models import Comment
 from message.forms import CommentForm
@@ -50,7 +56,6 @@ class PostDetailView(View):
         })
 
 
-
 class TagView(View):
     def get(self, request, slug, *args, **kwargs):
         tag = get_object_or_404(Tag, slug=slug)
@@ -79,3 +84,48 @@ class SearchResultsView(View):
             'results': page_obj,
             'count': paginator.count
         })
+
+
+class ProfileDetailView(DetailView):
+    model = Profile
+    context_object_name = 'profile'
+    template_name = 'blog/profile_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Страница пользователя: {self.object.user.username}'
+        return context
+
+
+class ProfileUpdateView(UpdateView):
+    model = Profile
+    form_class = ProfileUpdateForm
+    template_name = 'blog/profile_edit.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user.profile
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Редактирование профиля пользователя: {self.request.user.username}'
+        if self.request.POST:
+            context['user_form'] = UserUpdateForm(self.request.POST, instance=self.request.user)
+        else:
+            context['user_form'] = UserUpdateForm(instance=self.request.user)
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        user_form = context['user_form']
+        with transaction.atomic():
+            if all([form.is_valid(), user_form.is_valid()]):
+                user_form.save()
+                form.save()
+            else:
+                context.update({'user_form': user_form})
+                return self.render_to_response(context)
+
+        return super(ProfileUpdateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('profile_detail', kwargs={'slug': self.object.slug})
