@@ -5,21 +5,20 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from taggit.managers import TaggableManager
 
 from django.urls import reverse
-from django.utils.crypto import get_random_string
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
 class UserPost(models.Model):
     h1 = models.CharField(default='', max_length=200)
-    title = models.CharField(default='', max_length=200)
-    url = models.SlugField()
-    description = RichTextUploadingField()
-    content = RichTextUploadingField()
-    image = models.ImageField(default='default.jpeg', upload_to='images/posts_images/%Y/%m/%d')
-    created_at = models.DateTimeField(default=timezone.now)
+    title = models.CharField(verbose_name='Заголовок', default='', max_length=200)
+    url = models.SlugField(verbose_name='URL')
+    description = RichTextUploadingField(verbose_name='Описание поста')
+    content = RichTextUploadingField(verbose_name='Текст поста')
+    image = models.ImageField(verbose_name='Изображение', default='default.jpeg', upload_to='images/posts_images/%Y/%m/%d')
+    created_at = models.DateTimeField(verbose_name='Дата создания', default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    tag = TaggableManager()
+    tag = TaggableManager(verbose_name='Теги', blank=True)
 
     def __str__(self):
         return self.title
