@@ -29,6 +29,16 @@ class MainPageView(View):
             'page_obj': page_obj,
         })
 
+class UserProfileView(View):
+    def get(self, request, slug, *args, **kwargs):
+        post = get_object_or_404(UserPost, url=slug)
+        profile = get_object_or_404(Profile, slug=post.author)
+        posts = UserPost.objects.filter(author=post.author)
+        return render(request, 'blog/user_profile.html', context={
+            'author': f'{post.author}',
+            'posts': posts,
+            'profile': profile
+        })
 
 class PostDetailView(View):
     def get(self, request, slug, *args, **kwargs):

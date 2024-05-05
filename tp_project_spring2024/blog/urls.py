@@ -6,7 +6,8 @@ from .views import (
     SearchResultsView,
     ProfileDetailView,
     ProfileUpdateView,
-    PostCreateView
+    PostCreateView,
+    UserProfileView
 )
 
 urlpatterns = [
@@ -17,4 +18,5 @@ urlpatterns = [
     path('search/', SearchResultsView.as_view(), name='search_results'),
     path('edit_profile/', ProfileUpdateView.as_view(), name='profile_edit'),
     path('user_profile/<slug>/', ProfileDetailView.as_view(), name='profile_detail'),
+    path('profile/<slug>/', UserProfileView.as_view(), name='user_profile'),
 ]
