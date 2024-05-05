@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
-from .models import Profile
+from .models import Profile, UserPost
 
 
 class RegisterForm(forms.Form):
@@ -112,6 +112,19 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('slug', 'birth_date', 'bio', 'image')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control',
+                'autocomplete': 'off'
+            })
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = UserPost
+        fields = ('h1', 'title', 'description', 'content', 'tag')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

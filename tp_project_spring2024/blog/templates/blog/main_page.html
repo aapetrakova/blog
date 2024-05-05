@@ -7,14 +7,13 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
+    <div class="container" align="center">
       <h1 class="my-3">Последние записи блога</h1>
-      <div class="row">
         {% for post in page_obj %}
         <div class="col-md-4">
           <div class="card mb-4 shadow-sm">
             <img src="{{ post.image.url }}" alt="" class="card-img-top">
-            <div class="card-body">
+            <div class="card-body" align="left">
               <h4 class="card-title">{{ post.h1 }}</h4>
               {{ post.description|safe|truncatechars:100 }}<br>
               {% for tag in post.tag.all %}
@@ -30,10 +29,9 @@
           </div>
         </div>
         {% endfor %}
-      </div>
+
     </div>
 {% endblock %}
-
 
 
 {% block pagination %}

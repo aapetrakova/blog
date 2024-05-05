@@ -53,7 +53,7 @@
             <li>Дата рождения: {{ profile.birth_date }}</li>
             <li>О себе: {{ profile.bio }}</li>
         </ul>
-        <a href="#" class="btn btn-sm btn-primary" style="background-color: limegreen">Новый пост</a>
+        <a href="{% url 'post_create' %}" class="btn btn-sm btn-primary" style="background-color: limegreen">Новый пост</a>
         <a href="{% url 'profile_edit' %}" class="btn btn-sm btn-primary" style="background-color: darkred">Редактировать профиль</a>
     </div>
 </div>

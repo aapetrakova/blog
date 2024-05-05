@@ -8,17 +8,33 @@ from django.urls import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from django.utils.text import slugify
+from time import time
+
+
+def gen_url(text):
+    new_url = slugify(text)
+    return new_url + str(time())
+
 
 class UserPost(models.Model):
     h1 = models.CharField(default='', max_length=200)
     title = models.CharField(verbose_name='Заголовок', default='', max_length=200)
-    url = models.SlugField(verbose_name='URL')
+    url = models.SlugField(verbose_name='URL', blank=True, unique=True)
     description = RichTextUploadingField(verbose_name='Описание поста')
     content = RichTextUploadingField(verbose_name='Текст поста')
-    image = models.ImageField(verbose_name='Изображение', default='default.jpeg', upload_to='images/posts_images/%Y/%m/%d')
+
     created_at = models.DateTimeField(verbose_name='Дата создания', default=timezone.now)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     tag = TaggableManager(verbose_name='Теги', blank=True)
+
+    def get_absolute_url(self):
+        return reverse('post_detail', kwargs={'slug': self.url})
+
+    def save(self, *args, **kwargs):
+        if not self.url:
+            self.url = gen_url(self.title)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

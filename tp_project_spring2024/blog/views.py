@@ -1,9 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.core.paginator import Paginator
 
 from user.models import UserPost, Profile
-from user.forms import UserUpdateForm, ProfileUpdateForm
+from user.forms import UserUpdateForm, ProfileUpdateForm, PostForm
 from django.views.generic import DetailView, UpdateView
 from django.db import transaction
 from django.urls import reverse_lazy
@@ -129,3 +129,18 @@ class ProfileUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('profile_detail', kwargs={'slug': self.object.slug})
+
+
+class PostCreateView(View):
+    def get(self, request):
+        form = PostForm()
+        return render(request, 'blog/post_form.html', context={'form': form})
+
+    def post(self, request):
+        bound_form = PostForm(request.POST)
+        if bound_form.is_valid():
+            new_post = bound_form.save(commit=False)
+            new_post.author = self.request.user
+            new_post.save()
+            return redirect(new_post)
+        return render(request, 'blog/post_form.html', context={'form': bound_form})
