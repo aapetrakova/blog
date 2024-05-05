@@ -23,7 +23,7 @@ class UserPost(models.Model):
     url = models.SlugField(verbose_name='URL', blank=True, unique=True)
     description = RichTextUploadingField(verbose_name='Описание поста')
     content = RichTextUploadingField(verbose_name='Текст поста')
-
+    image = models.ImageField(upload_to='post_images/%Y/&m/%d', default='images/default_profile.jpg')
     created_at = models.DateTimeField(verbose_name='Дата создания', default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     tag = TaggableManager(verbose_name='Теги', blank=True)

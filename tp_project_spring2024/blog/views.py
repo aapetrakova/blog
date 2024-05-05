@@ -147,7 +147,7 @@ class PostCreateView(View):
         return render(request, 'blog/post_form.html', context={'form': form})
 
     def post(self, request):
-        bound_form = PostForm(request.POST)
+        bound_form = PostForm(request.POST, request.FILES)
         if bound_form.is_valid():
             new_post = bound_form.save(commit=False)
             new_post.author = self.request.user

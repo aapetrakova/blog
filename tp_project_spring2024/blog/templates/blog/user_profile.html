@@ -47,13 +47,18 @@
           <div class="card mb-4 shadow-sm">
             <div class="card-body" align="left">
               <h4 class="card-title">{{ post.h1 }}</h4>
-              {{ post.description|safe|truncatechars:100 }}<br>
+                <div class="leftimg">
+                    <img src="{{ post.image.url }}" alt="" width="100px">
+                </div>
+                <div class="text" style="margin: 10px 10px 100px 20px">
+                    {{ post.description|safe|truncatechars:100 }}<br>
+                </div>
               {% for tag in post.tag.all %}
                   <a href="{% url 'tag' tag.slug %}" class="mr-1 badge badge-info">#{{ tag }}</a>
               {% endfor %}
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a href="{% url 'post_detail' post.url %}" class="btn btn-sm btn-outline-secondary">Подробнее</a>
+                  <a href="{% url 'post_detail' post.url %}" class="btn btn-sm btn-outline-secondary" style="margin: 0px 0px 0px 10px">Подробнее</a>
                 </div>
                 <small class="text-muted">{{ post.created_at }}</small>
               </div>

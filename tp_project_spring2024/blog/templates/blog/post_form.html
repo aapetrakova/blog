@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <div class="content-section">
-        <form action="{% url 'post_create' %}" method="POST">
+        <form action="{% url 'post_create' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {% for field in form %}
                 <div class="form-group">

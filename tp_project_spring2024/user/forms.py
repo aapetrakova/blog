@@ -124,7 +124,7 @@ class ProfileUpdateForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = UserPost
-        fields = ('h1', 'title', 'description', 'content', 'tag')
+        fields = ('h1', 'title', 'description', 'content', 'image', 'tag')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
