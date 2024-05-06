@@ -3,3 +3,5 @@
 *.jpeg
 *.jpg
 *.png
+
+!use_cases/use_case_diagram.png
