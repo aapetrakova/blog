@@ -3,6 +3,7 @@ from .models import Comment
 
 
 class CommentAdmin(admin.ModelAdmin):
+    """Admin class for Comment"""
     pass
 
 
