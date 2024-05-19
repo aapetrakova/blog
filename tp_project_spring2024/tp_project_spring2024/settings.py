@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     'user.apps.UserConfig',
     'message.apps.MessageConfig',
+    'taggit',
 ]
 
 MIDDLEWARE = [
