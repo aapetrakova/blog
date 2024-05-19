@@ -20,7 +20,17 @@ from django.db.models import Q
 
 
 class MainPageView(View):
+    """A class for visualizing the main page of a blog"""
+
     def get(self, request, *args, **kwargs):
+        """"GET request for the main page of a blog
+
+        :param request: GET request
+        :param args:
+        :param kwargs:
+        :return: the main page of the blog
+        """
+
         posts = UserPost.objects.all()
         paginator = Paginator(posts, 6)
         page_number = request.GET.get('page')
@@ -31,6 +41,15 @@ class MainPageView(View):
 
 class UserProfileView(View):
     def get(self, request, slug, *args, **kwargs):
+        """GET request for the post detail page of a blog
+
+        :param request: GET request
+        :param slug: url of the post
+        :param args:
+        :param kwargs:
+        :return: the post detail page
+        """
+
         post = get_object_or_404(UserPost, url=slug)
         profile = get_object_or_404(Profile, slug=post.author)
         posts = UserPost.objects.filter(author=post.author)
@@ -54,6 +73,15 @@ class PostDetailView(View):
         })
 
     def post(self, request, slug, *args, **kwargs):
+        """POST request for the comments on post detail page of a blog
+
+        :param request: POST request
+        :param slug: url of the post
+        :param args:
+        :param kwargs:
+        :return: the comment on post detail page
+        """
+
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             text = request.POST['text']

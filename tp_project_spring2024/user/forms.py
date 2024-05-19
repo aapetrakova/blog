@@ -6,6 +6,14 @@ from .models import Profile, UserPost
 
 
 class RegisterForm(forms.Form):
+    """Form for registering a new user.
+
+    atribute:username: CharField - user's username.'
+    atribute:password: CharField - user's password.'
+    atribute:repeat_password: CharField - user's repeat password.'
+    atribute:email: EmailField - user's email address.'
+    """
+
     username = forms.CharField(
         max_length=100,
         required=True,
@@ -48,6 +56,10 @@ class RegisterForm(forms.Form):
     )
 
     def clean(self):
+        """
+
+        :return: raise, if password and repeat_password not match, else path
+        """
         password = self.cleaned_data['password']
         confirm_password = self.cleaned_data['repeat_password']
 
@@ -57,6 +69,10 @@ class RegisterForm(forms.Form):
             )
 
     def save(self):
+        """
+
+        :return: authenticated user
+        """
         user = User.objects.create_user(
             username=self.cleaned_data['username'],
             password=self.cleaned_data['password'],
@@ -67,6 +83,12 @@ class RegisterForm(forms.Form):
 
 
 class LogInForm(forms.Form):
+    """
+    Form for logging in.
+
+    atribute:username: CharField - user's username.'
+    atribute:password: CharField - user's password.'
+    """
     username = forms.CharField(
         max_length=100,
         required=True,

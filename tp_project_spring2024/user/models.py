@@ -18,6 +18,18 @@ def gen_url(text):
 
 
 class UserPost(models.Model):
+    """
+    Model for storing user posts
+
+    atribute:h1: CharField - h1 title of post
+    atribute:title: CharField - the title of post
+    atribute:url: SlugField - the url of post
+    atribute:description: RichTextField - the description of post
+    atribute:content: RichTextField - the content of post
+    atribute:image: ImageField - image for post
+    atribute:created_at: DateTimeField - date and time when the comment was created
+    atribute:author: User - author of post
+    """
     h1 = models.CharField(default='', max_length=200)
     title = models.CharField(verbose_name='Заголовок', default='', max_length=200)
     url = models.SlugField(verbose_name='URL', blank=True, unique=True)
